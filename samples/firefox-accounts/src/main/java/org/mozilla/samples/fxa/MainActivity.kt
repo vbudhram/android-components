@@ -43,8 +43,7 @@ open class MainActivity : AppCompatActivity(), LoginFragment.OnLoginCompleteList
                 account?.getProfile()
             }, {
                 getIntent().getExtras()?.getString("pairingUrl")?.let {
-                    Config.custom(CONFIG_URL_PAIRING).then { value: Config ->
-                        val acct = FirefoxAccount(value, CLIENT_ID, REDIRECT_URL)
+                    Config.accountFrom(CONFIG_URL_PAIRING, CLIENT_ID, REDIRECT_URL).then { acct: FirefoxAccount ->
                         account = acct
 
                         account?.beginPairingFlow(it, scopes)?.whenComplete {
@@ -54,8 +53,7 @@ open class MainActivity : AppCompatActivity(), LoginFragment.OnLoginCompleteList
                         acct.getProfile()
                     }
                 } ?: run {
-                    Config.custom(CONFIG_URL).then { value: Config ->
-                        val acct = FirefoxAccount(value, CLIENT_ID, REDIRECT_URL)
+                    Config.accountFrom(CONFIG_URL, CLIENT_ID, REDIRECT_URL).then { acct: FirefoxAccount ->
                         account = acct
 
                         acct.getProfile()

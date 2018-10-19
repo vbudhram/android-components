@@ -35,5 +35,19 @@ class Config(override var rawPointer: RawConfig?) : RustObject<RawConfig>() {
                 Config(p)
             }
         }
+
+        /**
+         * Create an FirefoxAccount object from the configuration at `content_base`.
+         *
+         * @param content_base Hostname of the FxA auth service provider
+         * @param client_id ClientId of the client
+         * @param redirect_url RedirectUrl of the client
+         */
+        fun accountFrom(content_base: String, client_id: String, redirect_url: String): FxaResult<FirefoxAccount> {
+            return safeAsync { e ->
+                val p = FxaClient.INSTANCE.fxa_get_custom_config(content_base, e)
+                FirefoxAccount(Config(p), client_id, redirect_url)
+            }
+        }
     }
 }
